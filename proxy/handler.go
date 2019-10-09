@@ -6,6 +6,7 @@ package proxy
 import (
 	"io"
 	"time"
+	"context"
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
