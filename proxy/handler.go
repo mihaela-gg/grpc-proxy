@@ -68,6 +68,7 @@ func (s *handler) handler(srv interface{}, serverStream grpc.ServerStream) error
 	outgoingCtx, backendConn, err := s.director(serverStream.Context(), fullMethodName)
     d := time.Now().Add(300 * time.Second)
 	clientCtx, clientCancel := context.WithDeadline(outgoingCtx, d)
+	backendConn.SetReadDeadline(d)
 	if err != nil {
 		return err
 	}
