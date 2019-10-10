@@ -60,15 +60,14 @@ type handler struct {
 // forwarding it to a ClientStream established against the relevant ClientConn.
 func (s *handler) handler(srv interface{}, serverStream grpc.ServerStream) error {
 	// little bit of gRPC internals never hurt anyone
-  fullMethodName, ok := grpc.MethodFromServerStream(serverStream)
+	fullMethodName, ok := grpc.MethodFromServerStream(serverStream)
 	if !ok {
 		return grpc.Errorf(codes.Internal, "lowLevelServerStream not exists in context")
 	}
 	// We require that the director's returned context inherits from the serverStream.Context().
 	outgoingCtx, backendConn, err := s.director(serverStream.Context(), fullMethodName)
-    d := time.Now().Add(300 * time.Second)
+	d := time.Now().Add(300 * time.Second)
 	clientCtx, clientCancel := context.WithDeadline(outgoingCtx, d)
-	backendConn.SetReadDeadline(d)
 	if err != nil {
 		return err
 	}
